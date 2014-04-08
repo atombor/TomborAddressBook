@@ -19,9 +19,12 @@ public class DataHandlerFactory {
 	
 	public static DataHandler initDataHandler(final String fileName) {
 		if (fileName == null) {
-			return new DataHandler(DEFAULT_DATAFILE_NAME);
+			DataHandlerFactory.fileName = DEFAULT_DATAFILE_NAME;
 		}
-		return new DataHandler(fileName);
+		else {
+			DataHandlerFactory.fileName = fileName;
+		}
+		return new DataHandler(DataHandlerFactory.fileName);
 	}
 	
 	

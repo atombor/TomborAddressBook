@@ -10,7 +10,7 @@ package org.ta.data;
  *
  * @author atombor
  */
-public class AddressRecord {
+public class AddressRecord implements CharSequence{
 	
 	private String name;
 	private String phoneNumber;
@@ -18,6 +18,19 @@ public class AddressRecord {
 	public AddressRecord(String name, String phoneNumber) {
 		this.name = name;
 		this.phoneNumber = phoneNumber;
+	}
+	
+	public String toString() {
+		return name + "," + phoneNumber;
+	}
+	public CharSequence subSequence(int start, int end) {
+		return this.toString().subSequence(start, end);
+	}
+	public char charAt(int i) {
+		return this.toString().charAt(i);
+	}
+	public int length() {
+		return this.toString().length();
 	}
 
 	protected void setName(String name) {
