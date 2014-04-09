@@ -111,9 +111,15 @@ public class TomborAddressBook {
 			}
 			case PRINT_ALL: {
 				List<AddressRecord> addressList = dataHandler.findAllAddressRecord();
-				addressList.stream().forEach((addr) -> {
-					System.out.println(addr.toString());
-				});
+				if (addressList.size() > 0) {
+					System.out.println("Name\tPhone number");
+					addressList.stream().forEach((addr) -> {
+						System.out.println(addr.getName() + "\t" + addr.getPhoneNumber());
+					});
+				}
+				else {
+					System.out.println("Address list is empty.");
+				}
 				break;
 			}
 			case SEARCH: {
