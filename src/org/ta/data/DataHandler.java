@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.ta.data;
 
 import java.io.IOException;
@@ -16,10 +11,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ * This class provides support for the data operations for reading and writing
+ * AddressRecord data to the text file.
  * @author atombor
  */
 public class DataHandler {
@@ -32,7 +29,6 @@ public class DataHandler {
     };
 	private final static FileAttribute[] FILE_ATTR = {};
 	private final static LinkOption[] OPEN_OPTIONS = {};
-
 
 	protected DataHandler(final String fileName) {
 		this.dataList = new ArrayList();
@@ -55,9 +51,16 @@ public class DataHandler {
 			for(String line: stringDataList) {
 				this.dataList.add( parseFileLine(line) );
 			}
+			sortByName();
 		}
 	
 	}
+	
+	private void sortByName() {
+		Collections.sort(dataList, (
+			AddressRecord ar1, AddressRecord ar2) -> ar1.getName().compareTo(ar2.getName()));
+	}
+	
 
 	private AddressRecord parseFileLine(String text) {
 		String[] dataLine = text.split(",");
@@ -68,12 +71,11 @@ public class DataHandler {
 	}
 	
 	public void saveDataList() {
-		//TODO remove
-			
 		Path dataFilePath = Paths.get(DataHandlerFactory.fileName);
-
 		try {
+
 			Files.write(dataFilePath, dataList, ENCODING, WRITE_OPTIONS );	
+
 		} catch (IOException e) {
 			System.out.println("IOException occured at file save.");
 			e.printStackTrace(System.out);
@@ -82,10 +84,22 @@ public class DataHandler {
 	
 	public void addAddressRecord(String name, String phoneNumber ) {
 		dataList.add(new AddressRecord(name, phoneNumber));
+		sortByName();
 	}
 	
-	public List<AddressRecord> getAllAddressRecord() {
+	public List<AddressRecord> findAllAddressRecord() {
 		return this.dataList;
 	}
 	
+	public List<AddressRecord> findAddressRecordByName(String phrase) {
+		//TODO: implement improved search
+		ArrayList<AddressRecord> retVal = new ArrayList<>();
+		this.dataList.stream().forEach((addr) -> {
+			if (addr.getName().contains(phrase)) {
+				retVal.add(addr);
+			}
+		});
+		return retVal;
+	}
+
 }

@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.ta.data;
 
 /**
- *
+ * Represents the basic data record of the application.
+ * implements java.lang.CharSequence to support Files.write
  * @author atombor
  */
-public class AddressRecord implements CharSequence{
+public class AddressRecord implements CharSequence {
 	
 	private String name;
 	private String phoneNumber;
@@ -19,16 +14,19 @@ public class AddressRecord implements CharSequence{
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 	}
-	
+	@Override
 	public String toString() {
 		return name + "," + phoneNumber;
 	}
+	@Override
 	public CharSequence subSequence(int start, int end) {
 		return this.toString().subSequence(start, end);
 	}
+	@Override
 	public char charAt(int i) {
 		return this.toString().charAt(i);
 	}
+	@Override
 	public int length() {
 		return this.toString().length();
 	}
