@@ -44,15 +44,10 @@ public class TomborAddressBook {
 		}
 	} ;	
 	
-	
-	/**
-	 * @param args the command line arguments
-	 */
 	public static void main(String[] args) {
 		
 		String dataFileName = null;
 		// param validation
-		
 		if (args.length > 1) {
 			System.out.println("The application can have one parameter, the data filename");
 			System.exit(1);
@@ -71,9 +66,7 @@ public class TomborAddressBook {
 
 			choosenMenu = printMenu();
 
-			if (choosenMenu != null) {
-				handleUserAction(choosenMenu);
-			}
+			handleUserAction(choosenMenu);
 			
 		} while (! Menu.QUIT.equals(choosenMenu));
 
@@ -95,42 +88,50 @@ public class TomborAddressBook {
 	}
 	
 	private static void handleUserAction(final Menu choosenMenu) {
-		
-		switch (choosenMenu) {
-			case ADD: {
-				System.out.println("Enter new record in format <name>, <phone>:");
-				String inputLine = systemInput.next();
-				String[] data = inputLine.split(",");
-				if (data.length == 2) {
-					dataHandler.addAddressRecord(data[0], data[1]);
+		if (choosenMenu != null) {		
+			switch (choosenMenu) {
+				case ADD: {
+					System.out.println("Enter new record in format <name>, <phone>:");
+					String inputLine = systemInput.next();
+					String[] data = inputLine.split(",");
+					if (data.length == 2) {
+						dataHandler.addAddressRecord(data[0], data[1]);
+					}
+					else {
+						System.out.println("Incorrect input format, address is not saved.");
+					}						
+					break;
 				}
-				else {
-					System.out.println("Incorrect input format, address is not saved.");
-				}						
-				break;
-			}
-			case PRINT_ALL: {
-				List<AddressRecord> addressList = dataHandler.findAllAddressRecord();
-				if (addressList.size() > 0) {
-					System.out.println("Name\tPhone number");
-					addressList.stream().forEach((addr) -> {
-						System.out.println(addr.getName() + "\t" + addr.getPhoneNumber());
-					});
+				case PRINT_ALL: {
+					printAddressList(dataHandler.findAllAddressRecord());
+					break;
 				}
-				else {
-					System.out.println("Address list is empty.");
+				case SEARCH: {
+					System.out.print("Enter name to search for: ");
+					String inputLine = systemInput.next();
+
+					printAddressList(dataHandler.findAddressRecordByName(inputLine));
+					break;
 				}
-				break;
-			}
-			case SEARCH: {
-				System.out.print("Enter name to search for: ");
-				String inputLine = systemInput.next();
-				List<AddressRecord> searchResultList = dataHandler.findAddressRecordByName(inputLine);
-				searchResultList.stream().forEach((addr) -> {
-					System.out.println(addr.toString());
-				});
-				break;
-			}
+				case QUIT: { 
+					//Nothing to do
+				}
+			} 
+		}
+		else {
+			System.out.println("Invalid menu command.");
+		}
+	}
+	
+	private static void printAddressList(List<AddressRecord> addressList) {
+		if (addressList.size() > 0) {
+			System.out.println("Name\tPhone number");
+			addressList.stream().forEach((addr) -> {
+				System.out.println(addr.getName() + "\t" + addr.getPhoneNumber());
+			});
+		}
+		else {
+			System.out.println("No Address record found.");
 		}
 	}
 }
